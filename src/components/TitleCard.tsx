@@ -91,13 +91,12 @@ const TitleCard = () => {
     return state.title.description;
   });
 
-  const focus = useSelector<RootState, number>((state) => {
+  const focus = useSelector<RootState, string>((state) => {
     return state.focus.focus;
   });
 
   const handleClick = () => {
-    dispatch(setFocus(0));
-    console.log(focus);
+    dispatch(setFocus("title"));
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +111,7 @@ const TitleCard = () => {
     <Wrapper onClick={handleClick}>
       <HeaderLine />
       <ContentWrapper>
-        <FocusLine focused={focus === 0 ? true : false} />
+        <FocusLine focused={focus === "title" ? true : false} />
         <TitleWrapper>
           <TitleInput onChange={onChangeTitle} value={title} />
         </TitleWrapper>

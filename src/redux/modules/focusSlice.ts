@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const focusSlice = createSlice({
   name: "focusSlice",
   initialState: {
-    focus: -1,
+    focus: "",
   },
   reducers: {
     setFocus: (state, action) => {
