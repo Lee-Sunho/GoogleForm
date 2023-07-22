@@ -11,20 +11,21 @@ import { useState } from "react";
 import { QuestionProps, QuestionTypes } from "../redux/modules/questionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
-import { setType } from "../redux/modules/questionSlice";
+import { setQuestionType } from "../redux/modules/questionSlice";
 
-const SelectType = () => {
+interface IProps {
+  id: string;
+}
+
+const SelectType = ({ id }: IProps) => {
   const dispatch = useDispatch();
-  const focusId = useSelector<RootState, string>((state) => {
-    return state.focus.focus;
-  });
   const cardList = useSelector<RootState, QuestionProps[]>((state) => {
     return state.question;
   });
-  const current = cardList.find((card) => card.id === focusId);
+  const current = cardList.find((card) => card.id === id);
 
   const handleSelect = (e: SelectChangeEvent) => {
-    dispatch(setType({ id: focusId, questionType: e.target.value }));
+    dispatch(setQuestionType({ id: id, questionType: e.target.value }));
   };
   return (
     <FormControl sx={{ m: 1, width: 208, height: 48 }} size="small">
