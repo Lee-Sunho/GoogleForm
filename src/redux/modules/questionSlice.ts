@@ -42,12 +42,17 @@ const questionSlice = createSlice({
         createNewquestion(action.payload.id, action.payload.questionTitle)
       );
     },
-    setType: (state: QuestionProps[], action) => {
+    setQuestionTitle: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      target!.questionTitle = action.payload.questionTitle;
+    },
+    setQuestionType: (state: QuestionProps[], action) => {
       const target = state.find((card) => card.id === action.payload.id);
       target!.questionType = action.payload.questionType;
     },
   },
 });
 
-export const { addQuestion, setType } = questionSlice.actions;
+export const { addQuestion, setQuestionType, setQuestionTitle } =
+  questionSlice.actions;
 export default questionSlice.reducer;
