@@ -42,8 +42,12 @@ const questionSlice = createSlice({
         createNewquestion(action.payload.id, action.payload.questionTitle)
       );
     },
+    setType: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      target!.questionType = action.payload.questionType;
+    },
   },
 });
 
-export const { addQuestion } = questionSlice.actions;
+export const { addQuestion, setType } = questionSlice.actions;
 export default questionSlice.reducer;
