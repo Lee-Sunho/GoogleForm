@@ -11,7 +11,7 @@ const Button = styled.button`
   position: sticky;
   top: 100px;
   background-color: white;
-  border: 1px solid ${(props) => props.theme.lightgray};
+  border: 1px solid ${(props) => props.theme.bordergray};
   border-radius: 8px;
   margin-left: 16px;
   width: 48px;

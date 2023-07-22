@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 768px;
   position: relative;
-  border: 1px solid ${(props) => props.theme.lightgray};
+  border: 1px solid ${(props) => props.theme.bordergray};
   border-radius: 8px;
   background-color: white;
 `;
@@ -56,7 +56,7 @@ const TitleInput = styled.input`
   font-weight: 400;
   border: 0;
   outline: none;
-  border-bottom: 2px solid ${(props) => props.theme.lightgray};
+  border-bottom: 2px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
@@ -74,7 +74,7 @@ const DescriptionInput = styled.input`
   width: 100%;
   border: 0;
   outline: none;
-  border-bottom: 2px solid ${(props) => props.theme.lightgray};
+  border-bottom: 2px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
