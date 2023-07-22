@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addQuestion, QuestionProps } from "../redux/modules/questionSlice";
 import { RootState } from "../redux/configureStore";
 import { setFocus } from "../redux/modules/focusSlice";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const Button = styled.button`
   position: sticky;
@@ -18,7 +19,7 @@ const Button = styled.button`
   height: 48px;
 `;
 
-const Icon = styled(FontAwesomeIcon)`
+const Icon = styled(AddCircleOutlineIcon)`
   color: ${(props) => props.theme.icongray};
 `;
 
@@ -53,7 +54,7 @@ const BtnAddQuestion = () => {
   };
   return (
     <Button onClick={onClick}>
-      <Icon icon={faPlus} size="2x" />
+      <Icon />
     </Button>
   );
 };
