@@ -2,7 +2,11 @@ import styled from "styled-components";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
-import { addOption, ItemProps } from "../redux/modules/questionSlice";
+import {
+  addOption,
+  removeOption,
+  ItemProps,
+} from "../redux/modules/questionSlice";
 import Icon_delete from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
@@ -71,11 +75,17 @@ const ItemRadio = ({ isPreview, contents }: IProps) => {
   });
 
   const handleAddOption = () => {
-    dispatch(addOption({ id: focusedId, text: "", isEtc: false }));
+    const optionId = Date.now().toString();
+    dispatch(addOption({ id: focusedId, optionId, text: "", isEtc: false }));
   };
 
   const handleAddEtcOption = () => {
-    dispatch(addOption({ id: focusedId, text: "기타", isEtc: true }));
+    const optionId = Date.now().toString();
+    dispatch(addOption({ id: focusedId, optionId, text: "기타", isEtc: true }));
+  };
+
+  const handleRemoveOption = (optionId: string) => {
+    dispatch(removeOption({ optionId, id: focusedId }));
   };
   return (
     <Wrapper>
@@ -104,7 +114,7 @@ const ItemRadio = ({ isPreview, contents }: IProps) => {
               }
             />
             {contents.length > 1 ? (
-              <DeleteButton>
+              <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
                 <Icon_delete fontSize="small" />
               </DeleteButton>
             ) : null}

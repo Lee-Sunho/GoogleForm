@@ -17,7 +17,7 @@ export interface QuestionProps {
 }
 
 export interface ItemProps {
-  id: string;
+  optionId: string;
   text: string;
   isEtc: boolean;
 }
@@ -27,14 +27,16 @@ const createNewQuestion = (id: string, questionTitle: string) => {
     id,
     questionTitle,
     questionType: QuestionTypes.RADIO,
-    contents: [{ id: Date.now().toString(), text: "옵션 1", isEtc: false }],
+    contents: [
+      { optionId: Date.now().toString(), text: "옵션 1", isEtc: false },
+    ],
     isRequired: false,
   };
 };
 
-const createNewOption = (id: string, text: string, isEtc: boolean) => {
+const createNewOption = (optionId: string, text: string, isEtc: boolean) => {
   return {
-    id,
+    optionId,
     text,
     isEtc,
   };
@@ -63,15 +65,27 @@ const questionSlice = createSlice({
       const target = state.find((card) => card.id === action.payload.id);
       target!.contents.push(
         createNewOption(
-          action.payload.id,
+          action.payload.optionId,
           action.payload.text,
           action.payload.isEtc
         )
       );
     },
+    removeOption: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      const temp = target!.contents.filter(
+        (item) => item.optionId !== action.payload.optionId
+      );
+      target!.contents = temp;
+    },
   },
 });
 
-export const { addQuestion, setQuestionType, setQuestionTitle, addOption } =
-  questionSlice.actions;
+export const {
+  addQuestion,
+  setQuestionType,
+  setQuestionTitle,
+  addOption,
+  removeOption,
+} = questionSlice.actions;
 export default questionSlice.reducer;
