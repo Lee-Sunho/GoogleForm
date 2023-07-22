@@ -5,6 +5,8 @@ import ItemLongText from "./ItemLongText";
 import ItemRadio from "./ItemRadio";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
+import ItemCheckbox from "./ItemCheckbox";
+import ItemDropdown from "./ItemDropdown";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -30,6 +32,16 @@ const ContentsArea = ({ id }: IProps) => {
 
           case QuestionTypes.RADIO:
             return <ItemRadio contents={current.contents} isPreview={false} />;
+
+          case QuestionTypes.CHECKBOX:
+            return (
+              <ItemCheckbox contents={current.contents} isPreview={false} />
+            );
+
+          case QuestionTypes.DROPDOWN:
+            return (
+              <ItemDropdown contents={current.contents} isPreview={false} />
+            );
         }
       })()}
     </Wrapper>
