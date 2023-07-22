@@ -44,9 +44,8 @@ const SelectType = ({ id }: IProps) => {
   return (
     <FormControl
       sx={{
-        display: "block",
         m: 1,
-        width: 208,
+        width: 230,
         height: 48,
       }}
       size="small"
