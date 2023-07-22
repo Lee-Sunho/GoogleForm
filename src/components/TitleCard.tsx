@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { RootState } from "../redux/configureStore";
@@ -8,7 +7,6 @@ import { setFocus } from "../redux/modules/focusSlice";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 768px;
   position: relative;
   border: 1px solid ${(props) => props.theme.bordergray};
   border-radius: 8px;
@@ -87,12 +85,8 @@ const TitleCard = () => {
     return state.title.title;
   });
 
-  const description = useSelector<RootState, string>((state) => {
-    return state.title.description;
-  });
-
   const focus = useSelector<RootState, string>((state) => {
-    return state.focus.focus;
+    return state.focus.focusedId;
   });
 
   const handleClick = () => {

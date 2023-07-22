@@ -5,10 +5,10 @@ import { RootState } from "../redux/configureStore";
 import { setFocus } from "../redux/modules/focusSlice";
 import { setQuestionTitle } from "../redux/modules/questionSlice";
 import SelectType from "./SelectType";
+import ContentsArea from "./ContentsArea";
 
 const Wrapper = styled.div`
-  display: flex;
-  width: 768px;
+  //width: 768px;
   position: relative;
   border: 1px solid ${(props) => props.theme.bordergray};
   border-radius: 8px;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   margin-top: 13px;
 `;
 
-const ContentWrapper = styled.div`
+const InfoWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
@@ -64,8 +64,8 @@ const QuestionCard = ({
   isRequired,
 }: QuestionProps) => {
   const dispatch = useDispatch();
-  const focusId = useSelector<RootState, string>((state) => {
-    return state.focus.focus;
+  const focusedId = useSelector<RootState, string>((state) => {
+    return state.focus.focusedId;
   });
 
   const handleClick = () => {
@@ -78,17 +78,18 @@ const QuestionCard = ({
 
   return (
     <Wrapper onClick={handleClick}>
-      <FocusLine focused={focusId === id ? true : false} />
-      <ContentWrapper>
+      <FocusLine focused={focusedId === id ? true : false} />
+      <InfoWrapper>
         <TitleWrapper>
           <TitleInput
             onChange={handleTitle}
-            focused={focusId === id ? true : false}
+            focused={focusedId === id ? true : false}
             value={questionTitle}
           />
         </TitleWrapper>
         <SelectType id={id} />
-      </ContentWrapper>
+      </InfoWrapper>
+      <ContentsArea id={id} />
     </Wrapper>
   );
 };
