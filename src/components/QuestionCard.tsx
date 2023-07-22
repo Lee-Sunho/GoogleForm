@@ -8,7 +8,6 @@ import SelectType from "./SelectType";
 import ContentsArea from "./ContentsArea";
 
 const Wrapper = styled.div`
-  //width: 768px;
   position: relative;
   border: 1px solid ${(props) => props.theme.bordergray};
   border-radius: 8px;
