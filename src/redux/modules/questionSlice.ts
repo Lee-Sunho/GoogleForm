@@ -11,23 +11,32 @@ export enum QuestionTypes {
 export interface QuestionProps {
   id: string;
   questionTitle: string;
-  questionType: string;
-  contents: string | ItemProps[];
+  questionType: QuestionTypes;
+  contents: ItemProps[];
   isRequired: boolean;
 }
 
 export interface ItemProps {
   id: string;
   text: string;
+  isEtc: boolean;
 }
 
-const createNewquestion = (id: string, questionTitle: string) => {
+const createNewQuestion = (id: string, questionTitle: string) => {
   return {
     id,
     questionTitle,
     questionType: QuestionTypes.RADIO,
-    contents: [{ id: Date.now().toString(), text: "옵션 1" }],
+    contents: [{ id: Date.now().toString(), text: "옵션 1", isEtc: false }],
     isRequired: false,
+  };
+};
+
+const createNewOption = (id: string, text: string, isEtc: boolean) => {
+  return {
+    id,
+    text,
+    isEtc,
   };
 };
 
@@ -39,7 +48,7 @@ const questionSlice = createSlice({
   reducers: {
     addQuestion: (state: QuestionProps[], action) => {
       state.push(
-        createNewquestion(action.payload.id, action.payload.questionTitle)
+        createNewQuestion(action.payload.id, action.payload.questionTitle)
       );
     },
     setQuestionTitle: (state: QuestionProps[], action) => {
@@ -50,9 +59,19 @@ const questionSlice = createSlice({
       const target = state.find((card) => card.id === action.payload.id);
       target!.questionType = action.payload.questionType;
     },
+    addOption: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      target!.contents.push(
+        createNewOption(
+          action.payload.id,
+          action.payload.text,
+          action.payload.isEtc
+        )
+      );
+    },
   },
 });
 
-export const { addQuestion, setQuestionType, setQuestionTitle } =
+export const { addQuestion, setQuestionType, setQuestionTitle, addOption } =
   questionSlice.actions;
 export default questionSlice.reducer;
