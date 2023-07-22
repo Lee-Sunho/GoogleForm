@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const focusSlice = createSlice({
   name: "focusSlice",
   initialState: {
-    focus: "",
+    focusedId: "",
   },
   reducers: {
     setFocus: (state, action) => {
-      state.focus = action.payload;
+      state.focusedId = action.payload;
     },
   },
 });
