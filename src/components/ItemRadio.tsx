@@ -5,6 +5,7 @@ import Radio from "@mui/material/Radio";
 import {
   addOption,
   removeOption,
+  setOptionText,
   ItemProps,
 } from "../redux/modules/questionSlice";
 import Icon_delete from "@mui/icons-material/Clear";
@@ -87,6 +88,13 @@ const ItemRadio = ({ isPreview, contents }: IProps) => {
   const handleRemoveOption = (optionId: string) => {
     dispatch(removeOption({ optionId, id: focusedId }));
   };
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    optionId: string
+  ) => {
+    dispatch(setOptionText({ id: focusedId, optionId, text: e.target.value }));
+  };
   return (
     <Wrapper>
       <RadioGroup
@@ -110,7 +118,11 @@ const ItemRadio = ({ isPreview, contents }: IProps) => {
                 />
               }
               label={
-                <Input readOnly={item.isEtc ? true : false} value={item.text} />
+                <Input
+                  onChange={(e) => handleOnChange(e, item.optionId)}
+                  readOnly={item.isEtc ? true : false}
+                  value={item.text}
+                />
               }
             />
             {contents.length > 1 ? (

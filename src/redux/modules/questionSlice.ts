@@ -78,6 +78,13 @@ const questionSlice = createSlice({
       );
       target!.contents = temp;
     },
+    setOptionText: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      const targetOption = target!.contents.find(
+        (item) => item.optionId === action.payload.optionId
+      );
+      targetOption!.text = action.payload.text;
+    },
   },
 });
 
@@ -87,5 +94,6 @@ export const {
   setQuestionTitle,
   addOption,
   removeOption,
+  setOptionText,
 } = questionSlice.actions;
 export default questionSlice.reducer;
