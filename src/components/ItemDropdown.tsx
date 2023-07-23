@@ -74,11 +74,12 @@ const NumberBox = styled.div`
 `;
 
 interface IProps {
+  id: string;
   isPreview: boolean;
   contents: ItemProps[];
 }
 
-const ItemDropdown = ({ isPreview, contents }: IProps) => {
+const ItemDropdown = ({ id, isPreview, contents }: IProps) => {
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -86,18 +87,18 @@ const ItemDropdown = ({ isPreview, contents }: IProps) => {
 
   const handleAddOption = () => {
     const optionId = Date.now().toString();
-    dispatch(addOption({ id: focusedId, optionId, text: "", isEtc: false }));
+    dispatch(addOption({ id, optionId, text: "", isEtc: false }));
   };
 
   const handleRemoveOption = (optionId: string) => {
-    dispatch(removeOption({ optionId, id: focusedId }));
+    dispatch(removeOption({ optionId, id }));
   };
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     optionId: string
   ) => {
-    dispatch(setOptionText({ id: focusedId, optionId, text: e.target.value }));
+    dispatch(setOptionText({ id, optionId, text: e.target.value }));
   };
   return (
     <Wrapper>
@@ -113,21 +114,23 @@ const ItemDropdown = ({ isPreview, contents }: IProps) => {
               />
             </InputWrapper>
 
-            {contents.length > 1 ? (
+            {contents.length > 1 && focusedId === id ? (
               <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
                 <Icon_delete fontSize="small" />
               </DeleteButton>
             ) : null}
           </ItemWrapper>
         ))}
-        <ItemWrapper>
-          <NumberBox>{contents.length + 1}</NumberBox>
-          <AddOptionsWrapper>
-            <AddOption onClick={handleAddOption} isEtc={false}>
-              옵션 추가
-            </AddOption>
-          </AddOptionsWrapper>
-        </ItemWrapper>
+        {focusedId === id ? (
+          <ItemWrapper>
+            <NumberBox>{contents.length + 1}</NumberBox>
+            <AddOptionsWrapper>
+              <AddOption onClick={handleAddOption} isEtc={false}>
+                옵션 추가
+              </AddOption>
+            </AddOptionsWrapper>
+          </ItemWrapper>
+        ) : null}
       </FormGroup>
     </Wrapper>
   );

@@ -23,13 +23,17 @@ const HeaderLine = styled.div`
   background-color: ${(props) => props.theme.darkpurple};
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.div<{ focused: boolean }>`
   position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 24px;
+  .input {
+    border-bottom: ${(props) =>
+      props.focused ? `1px solid ${props.theme.bordergray}` : "none"};
+  }
 `;
 
 const FocusLine = styled.div<{ focused: boolean }>`
@@ -40,7 +44,7 @@ const FocusLine = styled.div<{ focused: boolean }>`
   width: 6px;
   height: calc(100% - 10px);
   border-bottom-left-radius: 8px;
-  display: ${(props) => (props.focused ? "block" : "none")};
+  visibility: ${(props) => (props.focused ? "visible" : "hidden")};
 `;
 
 const TitleWrapper = styled.div`
@@ -50,11 +54,11 @@ const TitleWrapper = styled.div`
 
 const TitleInput = styled.input`
   width: 100%;
-  font-size: 24pt;
+  font-size: 24px;
   font-weight: 400;
   border: 0;
   outline: none;
-  border-bottom: 2px solid ${(props) => props.theme.bordergray};
+  //border-bottom: 1px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
@@ -67,12 +71,12 @@ const DescriptionWrapper = styled.div`
 `;
 
 const DescriptionInput = styled.input`
-  font-size: 11pt;
+  font-size: 14px;
   line-height: 15pt;
   width: 100%;
   border: 0;
   outline: none;
-  border-bottom: 2px solid ${(props) => props.theme.bordergray};
+  //border-bottom: 1px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
@@ -85,7 +89,7 @@ const TitleCard = () => {
     return state.title.title;
   });
 
-  const focus = useSelector<RootState, string>((state) => {
+  const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
   });
 
@@ -104,13 +108,14 @@ const TitleCard = () => {
   return (
     <Wrapper onClick={handleClick}>
       <HeaderLine />
-      <ContentWrapper>
-        <FocusLine focused={focus === "title" ? true : false} />
-        <TitleWrapper>
+      <ContentWrapper focused={focusedId === "title" ? true : false}>
+        <FocusLine focused={focusedId === "title" ? true : false} />
+        <TitleWrapper className="input">
           <TitleInput onChange={onChangeTitle} value={title} />
         </TitleWrapper>
         <DescriptionWrapper>
           <DescriptionInput
+            className="input"
             onChange={onChangeDescription}
             placeholder="설명을 입력하세요"
           />

@@ -5,7 +5,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  QuestionProps,
   copyQuestion,
   removeQuestion,
   toggleIsRequire,
@@ -22,7 +21,7 @@ const Wrapper = styled.div`
   border-top: 1px solid ${(props) => props.theme.bordergray};
 `;
 
-const BtnCopy = styled(Icon_copy)`
+const BtnCopy = styled.button`
   background-color: white;
   border: none;
   width: 25px;
@@ -32,7 +31,7 @@ const BtnCopy = styled(Icon_copy)`
   cursor: pointer;
 `;
 
-const BtnRemove = styled(Icon_trashcan)`
+const BtnRemove = styled.button`
   background-color: white;
   border: none;
   width: 25px;

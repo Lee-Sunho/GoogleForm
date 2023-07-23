@@ -65,11 +65,12 @@ const AddOption = styled.span<{ isEtc: boolean }>`
 `;
 
 interface IProps {
+  id: string;
   isPreview: boolean;
   contents: ItemProps[];
 }
 
-const ItemCheckbox = ({ isPreview, contents }: IProps) => {
+const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -77,23 +78,23 @@ const ItemCheckbox = ({ isPreview, contents }: IProps) => {
 
   const handleAddOption = () => {
     const optionId = Date.now().toString();
-    dispatch(addOption({ id: focusedId, optionId, text: "", isEtc: false }));
+    dispatch(addOption({ id, optionId, text: "", isEtc: false }));
   };
 
   const handleAddEtcOption = () => {
     const optionId = Date.now().toString();
-    dispatch(addOption({ id: focusedId, optionId, text: "기타", isEtc: true }));
+    dispatch(addOption({ id, optionId, text: "기타", isEtc: true }));
   };
 
   const handleRemoveOption = (optionId: string) => {
-    dispatch(removeOption({ optionId, id: focusedId }));
+    dispatch(removeOption({ optionId, id }));
   };
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     optionId: string
   ) => {
-    dispatch(setOptionText({ id: focusedId, optionId, text: e.target.value }));
+    dispatch(setOptionText({ id, optionId, text: e.target.value }));
   };
   return (
     <Wrapper>
@@ -122,41 +123,43 @@ const ItemCheckbox = ({ isPreview, contents }: IProps) => {
                 />
               }
             />
-            {contents.length > 1 ? (
+            {contents.length > 1 && focusedId === id ? (
               <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
                 <Icon_delete fontSize="small" />
               </DeleteButton>
             ) : null}
           </ItemWrapper>
         ))}
-        <ItemWrapper>
-          <FormControlLabel
-            value={"추가"}
-            control={
-              <Checkbox
-                disabled={!isPreview}
-                sx={{
-                  "&.Mui-checked": {
-                    color: "#673ab7",
-                  },
-                }}
-                size="small"
-              />
-            }
-            label={
-              <AddOptionsWrapper>
-                <AddOption onClick={handleAddOption} isEtc={false}>
-                  옵션 추가{" "}
-                </AddOption>
-                <span> 또는 </span>
-                <AddOption onClick={handleAddEtcOption} isEtc={true}>
-                  {" "}
-                  '기타' 추가
-                </AddOption>
-              </AddOptionsWrapper>
-            }
-          />
-        </ItemWrapper>
+        {focusedId === id ? (
+          <ItemWrapper>
+            <FormControlLabel
+              value={"추가"}
+              control={
+                <Checkbox
+                  disabled={!isPreview}
+                  sx={{
+                    "&.Mui-checked": {
+                      color: "#673ab7",
+                    },
+                  }}
+                  size="small"
+                />
+              }
+              label={
+                <AddOptionsWrapper>
+                  <AddOption onClick={handleAddOption} isEtc={false}>
+                    옵션 추가{" "}
+                  </AddOption>
+                  <span> 또는 </span>
+                  <AddOption onClick={handleAddEtcOption} isEtc={true}>
+                    {" "}
+                    '기타' 추가
+                  </AddOption>
+                </AddOptionsWrapper>
+              }
+            />
+          </ItemWrapper>
+        ) : null}
       </FormGroup>
     </Wrapper>
   );

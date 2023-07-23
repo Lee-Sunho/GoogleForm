@@ -5,8 +5,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { QuestionProps } from "../redux/modules/questionSlice";
 import QuestionCard from "../components/QuestionCard";
+import Header from "../components/Header";
 
-const Wrapper = styled.div`
+const HeaderWrapper = styled.div``;
+
+const CardListWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
@@ -18,19 +21,24 @@ const Form = () => {
     return state.question;
   });
   return (
-    <Wrapper>
-      <CardList>
-        <TitleCard />
-        {questionList.map((card) => (
-          <QuestionCard
-            key={card.id}
-            id={card.id}
-            questionTitle={card.questionTitle}
-          />
-        ))}
-      </CardList>
-      <BtnAddQuestion />
-    </Wrapper>
+    <>
+      <HeaderWrapper>
+        <Header />
+      </HeaderWrapper>
+      <CardListWrapper>
+        <CardList>
+          <TitleCard />
+          {questionList.map((card) => (
+            <QuestionCard
+              key={card.id}
+              id={card.id}
+              questionTitle={card.questionTitle}
+            />
+          ))}
+        </CardList>
+        <BtnAddQuestion />
+      </CardListWrapper>
+    </>
   );
 };
 

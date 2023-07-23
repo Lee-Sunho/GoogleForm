@@ -9,7 +9,7 @@ import ItemCheckbox from "./ItemCheckbox";
 import ItemDropdown from "./ItemDropdown";
 
 const Wrapper = styled.div`
-  padding: 0px 12px 12px 12px;
+  padding: 12px 12px 12px 12px;
 `;
 interface IProps {
   id: string;
@@ -31,16 +31,30 @@ const ContentsArea = ({ id }: IProps) => {
             return <ItemLongText isPreview={false} />;
 
           case QuestionTypes.RADIO:
-            return <ItemRadio contents={current.contents} isPreview={false} />;
+            return (
+              <ItemRadio
+                id={id}
+                contents={current.contents}
+                isPreview={false}
+              />
+            );
 
           case QuestionTypes.CHECKBOX:
             return (
-              <ItemCheckbox contents={current.contents} isPreview={false} />
+              <ItemCheckbox
+                id={id}
+                contents={current.contents}
+                isPreview={false}
+              />
             );
 
           case QuestionTypes.DROPDOWN:
             return (
-              <ItemDropdown contents={current.contents} isPreview={false} />
+              <ItemDropdown
+                id={id}
+                contents={current.contents}
+                isPreview={false}
+              />
             );
         }
       })()}

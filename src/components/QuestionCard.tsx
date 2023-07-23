@@ -19,7 +19,7 @@ const InfoWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  padding: 24px;
+  padding: 24px 24px 0px 24px;
 `;
 
 const FocusLine = styled.div<{ focused: boolean }>`
@@ -48,7 +48,7 @@ const TitleInput = styled.input<{ focused: boolean }>`
     props.focused ? `1px solid ${props.theme.bordergray}` : "none"};
   background-color: ${(props) =>
     props.focused ? `${props.theme.lightgray}` : "transparent"};
-  padding: ${(props) => (props.focused ? "16px" : "0px")};
+  padding: 16px;
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
@@ -88,12 +88,8 @@ const QuestionCard = ({ id, questionTitle }: IProps) => {
         </TitleWrapper>
         <SelectType id={id} />
       </InfoWrapper>
-      {focusedId === id ? (
-        <>
-          <ContentsArea id={id} />
-          <CardFooter id={id} />
-        </>
-      ) : null}
+      <ContentsArea id={id} />
+      {focusedId === id ? <CardFooter id={id} /> : null}
     </Wrapper>
   );
 };
