@@ -108,6 +108,10 @@ const questionSlice = createSlice({
       const temp = state.filter((card) => card.id !== action.payload.id);
       return temp;
     },
+    toggleIsRequire: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      target!.isRequired = !target!.isRequired;
+    },
   },
 });
 
@@ -120,5 +124,6 @@ export const {
   setOptionText,
   copyQuestion,
   removeQuestion,
+  toggleIsRequire,
 } = questionSlice.actions;
 export default questionSlice.reducer;

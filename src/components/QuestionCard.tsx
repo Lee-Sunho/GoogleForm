@@ -91,7 +91,7 @@ const QuestionCard = ({
         <SelectType id={id} />
       </InfoWrapper>
       <ContentsArea id={id} />
-      <CardFooter />
+      <CardFooter id={id} />
     </Wrapper>
   );
 };

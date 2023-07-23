@@ -4,7 +4,12 @@ import Icon_trashcan from "@mui/icons-material/DeleteForeverOutlined";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { useDispatch, useSelector } from "react-redux";
-import { copyQuestion, removeQuestion } from "../redux/modules/questionSlice";
+import {
+  QuestionProps,
+  copyQuestion,
+  removeQuestion,
+  toggleIsRequire,
+} from "../redux/modules/questionSlice";
 import { setFocus } from "../redux/modules/focusSlice";
 import { RootState } from "../redux/configureStore";
 
@@ -50,18 +55,18 @@ const labelStyle = {
   },
 };
 
-const CardFooter = () => {
-  const dispatch = useDispatch();
+interface IProps {
+  id: string;
+}
 
-  const focusedId = useSelector<RootState, string>((state) => {
-    return state.focus.focusedId;
-  });
+const CardFooter = ({ id }: IProps) => {
+  const dispatch = useDispatch();
 
   const handleCopyAndSetFocus = async () => {
     try {
       const newId = Date.now().toString();
 
-      await dispatch(copyQuestion({ id: focusedId, newId }));
+      await dispatch(copyQuestion({ id, newId }));
       dispatch(setFocus(newId));
     } catch (error) {
       console.log("Error: ", error);
@@ -69,7 +74,16 @@ const CardFooter = () => {
   };
 
   const handleRemoveQuestion = () => {
-    dispatch(removeQuestion({ id: focusedId }));
+    dispatch(removeQuestion({ id }));
+  };
+
+  const isRequired = useSelector<RootState, boolean | undefined>((state) => {
+    const current = state.question.find((card) => card.id === id);
+    return current?.isRequired;
+  });
+
+  const handleIsRequired = () => {
+    dispatch(toggleIsRequire({ id }));
   };
 
   return (
@@ -95,6 +109,8 @@ const CardFooter = () => {
                 backgroundColor: "#F0EBF8 !important",
               },
             }}
+            checked={isRequired}
+            onChange={handleIsRequired}
             size="small"
           />
         }
