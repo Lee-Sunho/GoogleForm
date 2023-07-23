@@ -6,6 +6,7 @@ import { setFocus } from "../redux/modules/focusSlice";
 import { setQuestionTitle } from "../redux/modules/questionSlice";
 import SelectType from "./SelectType";
 import ContentsArea from "./ContentsArea";
+import CardFooter from "./CardFooter";
 
 const Wrapper = styled.div`
   position: relative;
@@ -84,11 +85,13 @@ const QuestionCard = ({
             onChange={handleTitle}
             focused={focusedId === id ? true : false}
             value={questionTitle}
+            placeholder="질문"
           />
         </TitleWrapper>
         <SelectType id={id} />
       </InfoWrapper>
       <ContentsArea id={id} />
+      <CardFooter />
     </Wrapper>
   );
 };
