@@ -9,7 +9,7 @@ import ItemCheckbox from "./ItemCheckbox";
 import ItemDropdown from "./ItemDropdown";
 
 const Wrapper = styled.div`
-  padding: 0px 24px 24px 24px;
+  padding: 0px 12px 12px 12px;
 `;
 interface IProps {
   id: string;

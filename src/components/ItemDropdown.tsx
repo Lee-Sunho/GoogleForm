@@ -132,12 +132,7 @@ const ItemDropdown = ({ isPreview, contents }: IProps) => {
           <NumberBox>{contents.length + 1}</NumberBox>
           <AddOptionsWrapper>
             <AddOption onClick={handleAddOption} isEtc={false}>
-              옵션 추가{" "}
-            </AddOption>
-            <span> 또는 </span>
-            <AddOption onClick={handleAddEtcOption} isEtc={true}>
-              {" "}
-              '기타' 추가
+              옵션 추가
             </AddOption>
           </AddOptionsWrapper>
         </ItemWrapper>
