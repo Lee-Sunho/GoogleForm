@@ -57,8 +57,6 @@ const AddOptionsWrapper = styled.div`
 const AddOption = styled.span<{ isEtc: boolean }>`
   color: ${(props) => (props.isEtc ? props.theme.blue : props.theme.textgray)};
   font-size: 13px;
-  margin-right: 5px;
-  margin-left: ${(props) => (props.isEtc ? "5px" : "0px")};
   &:hover {
     background-color: ${(props) => props.theme.lightgray};
     border-bottom: ${(props) =>
@@ -68,12 +66,11 @@ const AddOption = styled.span<{ isEtc: boolean }>`
 
 const NumberBox = styled.div`
   display: flex;
-  width: 20px;
-  height: 20px;
-  justify-content: center;
+  width: 33px;
+  height: 33px;
   align-items: center;
-  font-size: 13px;
-  text-align: center;
+  font-size: 14px;
+  text-align: start;
 `;
 
 interface IProps {
@@ -90,11 +87,6 @@ const ItemDropdown = ({ isPreview, contents }: IProps) => {
   const handleAddOption = () => {
     const optionId = Date.now().toString();
     dispatch(addOption({ id: focusedId, optionId, text: "", isEtc: false }));
-  };
-
-  const handleAddEtcOption = () => {
-    const optionId = Date.now().toString();
-    dispatch(addOption({ id: focusedId, optionId, text: "기타", isEtc: true }));
   };
 
   const handleRemoveOption = (optionId: string) => {

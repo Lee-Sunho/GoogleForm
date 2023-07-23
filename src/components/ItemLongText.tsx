@@ -1,11 +1,11 @@
 import styled from "styled-components";
 const Input = styled.input`
+  padding-left: 24px;
   font-size: 12px;
   line-height: 15pt;
   width: 100%;
   border: 0;
   outline: none;
-  border-bottom: 1px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
 `;
 
