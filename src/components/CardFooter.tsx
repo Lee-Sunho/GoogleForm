@@ -3,6 +3,10 @@ import Icon_copy from "@mui/icons-material/ContentCopyRounded";
 import Icon_trashcan from "@mui/icons-material/DeleteForeverOutlined";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import { useDispatch, useSelector } from "react-redux";
+import { copyQuestion } from "../redux/modules/questionSlice";
+import { setFocus } from "../redux/modules/focusSlice";
+import { RootState } from "../redux/configureStore";
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,9 +51,26 @@ const labelStyle = {
 };
 
 const CardFooter = () => {
+  const dispatch = useDispatch();
+
+  const focusedId = useSelector<RootState, string>((state) => {
+    return state.focus.focusedId;
+  });
+
+  const handleCopyAndSetFocus = async () => {
+    try {
+      const newId = Date.now().toString();
+
+      await dispatch(copyQuestion({ id: focusedId, newId }));
+      dispatch(setFocus(newId));
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   return (
     <Wrapper>
-      <BtnCopy>
+      <BtnCopy onClick={handleCopyAndSetFocus}>
         <Icon_copy fontSize="small" />
       </BtnCopy>
       <BtnRemove>

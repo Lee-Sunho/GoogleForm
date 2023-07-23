@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export enum QuestionTypes {
   SHORTTEXT = "SHORTTEXT",
@@ -85,6 +85,22 @@ const questionSlice = createSlice({
       );
       targetOption!.text = action.payload.text;
     },
+    copyQuestion: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      const targetIndex = state.findIndex(
+        (card) => card.id === action.payload.id
+      );
+      const copiedCard: QuestionProps = {
+        ...target!,
+        id: action.payload.newId,
+      };
+      const copiedContents = copiedCard.contents?.map((item, index) => ({
+        ...item,
+        optionId: (Number(action.payload.newId) + index + 1).toString(),
+      }));
+      copiedCard.contents = copiedContents;
+      state.splice(targetIndex + 1, 0, copiedCard);
+    },
   },
 });
 
@@ -95,5 +111,6 @@ export const {
   addOption,
   removeOption,
   setOptionText,
+  copyQuestion,
 } = questionSlice.actions;
 export default questionSlice.reducer;
