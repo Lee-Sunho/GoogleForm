@@ -26,9 +26,6 @@ const Form = () => {
             key={card.id}
             id={card.id}
             questionTitle={card.questionTitle}
-            questionType={card.questionType}
-            contents={card.contents}
-            isRequired={card.isRequired}
           />
         ))}
       </CardList>
