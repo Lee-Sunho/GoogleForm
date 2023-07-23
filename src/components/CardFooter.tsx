@@ -4,7 +4,7 @@ import Icon_trashcan from "@mui/icons-material/DeleteForeverOutlined";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { useDispatch, useSelector } from "react-redux";
-import { copyQuestion } from "../redux/modules/questionSlice";
+import { copyQuestion, removeQuestion } from "../redux/modules/questionSlice";
 import { setFocus } from "../redux/modules/focusSlice";
 import { RootState } from "../redux/configureStore";
 
@@ -68,12 +68,16 @@ const CardFooter = () => {
     }
   };
 
+  const handleRemoveQuestion = () => {
+    dispatch(removeQuestion({ id: focusedId }));
+  };
+
   return (
     <Wrapper>
       <BtnCopy onClick={handleCopyAndSetFocus}>
         <Icon_copy fontSize="small" />
       </BtnCopy>
-      <BtnRemove>
+      <BtnRemove onClick={handleRemoveQuestion}>
         <Icon_trashcan fontSize="small" />
       </BtnRemove>
       <Line />

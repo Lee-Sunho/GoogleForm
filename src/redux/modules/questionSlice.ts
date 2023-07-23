@@ -101,6 +101,13 @@ const questionSlice = createSlice({
       copiedCard.contents = copiedContents;
       state.splice(targetIndex + 1, 0, copiedCard);
     },
+    removeQuestion: (state: QuestionProps[], action) => {
+      const targetIndex = state.findIndex(
+        (card) => card.id === action.payload.id
+      );
+      const temp = state.filter((card) => card.id !== action.payload.id);
+      return temp;
+    },
   },
 });
 
@@ -112,5 +119,6 @@ export const {
   removeOption,
   setOptionText,
   copyQuestion,
+  removeQuestion,
 } = questionSlice.actions;
 export default questionSlice.reducer;
