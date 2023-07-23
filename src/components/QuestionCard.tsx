@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { QuestionProps } from "../redux/modules/questionSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { setFocus } from "../redux/modules/focusSlice";
@@ -31,7 +30,7 @@ const FocusLine = styled.div<{ focused: boolean }>`
   height: 100%;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
-  display: ${(props) => (props.focused ? "block" : "none")};
+  visibility: ${(props) => (props.focused ? "visible" : "hidden")};
 `;
 
 const TitleWrapper = styled.div`
@@ -56,13 +55,12 @@ const TitleInput = styled.input<{ focused: boolean }>`
   }
 `;
 
-const QuestionCard = ({
-  id,
-  questionTitle,
-  questionType,
-  contents,
-  isRequired,
-}: QuestionProps) => {
+interface IProps {
+  id: string;
+  questionTitle: string;
+}
+
+const QuestionCard = ({ id, questionTitle }: IProps) => {
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -90,8 +88,12 @@ const QuestionCard = ({
         </TitleWrapper>
         <SelectType id={id} />
       </InfoWrapper>
-      <ContentsArea id={id} />
-      <CardFooter id={id} />
+      {focusedId === id ? (
+        <>
+          <ContentsArea id={id} />
+          <CardFooter id={id} />
+        </>
+      ) : null}
     </Wrapper>
   );
 };
