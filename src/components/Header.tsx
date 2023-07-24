@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <Wrapper>
       <BtnPreview>
-        <Link to={"/preview"}>
+        <Link to={"/preview"} target="_blank">
           <Icon_eye />
         </Link>
       </BtnPreview>
