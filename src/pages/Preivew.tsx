@@ -79,8 +79,11 @@ const Preview = () => {
       }
     };
     func();
-    checkRequired();
   }, []);
+
+  useEffect(() => {
+    checkRequired();
+  }, [inValidQuestions]);
 
   const checkRequired = () => {
     const temp: string[] = [];
