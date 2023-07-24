@@ -61,7 +61,7 @@ const PreviewDropdown = ({ id, isRequired }: IProps) => {
         id="demo-simple-select"
       >
         {current?.contents.map((item) => (
-          <MenuItem value={item.text}>
+          <MenuItem key={item.optionId} value={item.text}>
             <Item>
               <Text>{item.text}</Text>
             </Item>
