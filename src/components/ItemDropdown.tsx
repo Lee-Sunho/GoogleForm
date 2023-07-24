@@ -9,6 +9,8 @@ import {
 import Icon_delete from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
+import { PathMatch } from "react-router-dom";
+import PreviewDropdown from "./PreviewDropdown";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -38,6 +40,11 @@ const Input = styled.input`
   &:read-only {
     border-bottom: 1px solid ${(props) => props.theme.bordergray};
     color: ${(props) => props.theme.textgray};
+  }
+  &:disabled {
+    color: black;
+    border-bottom: none;
+    background-color: white;
   }
 `;
 
@@ -75,11 +82,12 @@ const NumberBox = styled.div`
 
 interface IProps {
   id: string;
-  isPreview: boolean;
+  isPreview: PathMatch | null;
   contents: ItemProps[];
+  isRequired: boolean;
 }
 
-const ItemDropdown = ({ id, isPreview, contents }: IProps) => {
+const ItemDropdown = ({ id, isPreview, contents, isRequired }: IProps) => {
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -121,7 +129,7 @@ const ItemDropdown = ({ id, isPreview, contents }: IProps) => {
             ) : null}
           </ItemWrapper>
         ))}
-        {focusedId === id ? (
+        {focusedId === id && !isPreview ? (
           <ItemWrapper>
             <NumberBox>{contents.length + 1}</NumberBox>
             <AddOptionsWrapper>

@@ -33,6 +33,7 @@ const Form = () => {
               key={card.id}
               id={card.id}
               questionTitle={card.questionTitle}
+              isRequired={card.isRequired}
             />
           ))}
         </CardList>

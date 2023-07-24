@@ -7,15 +7,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import ItemCheckbox from "./ItemCheckbox";
 import ItemDropdown from "./ItemDropdown";
+import { useMatch } from "react-router-dom";
+import PreviewDropdown from "./PreviewDropdown";
 
 const Wrapper = styled.div`
-  padding: 12px 12px 12px 12px;
+  padding: 12px 24px 24px 24px;
 `;
 interface IProps {
   id: string;
 }
 
 const ContentsArea = ({ id }: IProps) => {
+  const previewMatch = useMatch("/preview");
   const questionList = useSelector<RootState, QuestionProps[]>((state) => {
     return state.question;
   });
@@ -25,17 +28,30 @@ const ContentsArea = ({ id }: IProps) => {
       {(() => {
         switch (current?.questionType) {
           case QuestionTypes.SHORTTEXT:
-            return <ItemShortText isPreview={false} />;
+            return (
+              <ItemShortText
+                id={id}
+                isPreview={previewMatch}
+                isRequired={current.isRequired}
+              />
+            );
 
           case QuestionTypes.LONGTEXT:
-            return <ItemLongText isPreview={false} />;
+            return (
+              <ItemLongText
+                id={id}
+                isPreview={previewMatch}
+                isRequired={current.isRequired}
+              />
+            );
 
           case QuestionTypes.RADIO:
             return (
               <ItemRadio
                 id={id}
                 contents={current.contents}
-                isPreview={false}
+                isPreview={previewMatch}
+                isRequired={current.isRequired}
               />
             );
 
@@ -44,17 +60,25 @@ const ContentsArea = ({ id }: IProps) => {
               <ItemCheckbox
                 id={id}
                 contents={current.contents}
-                isPreview={false}
+                isPreview={previewMatch}
+                isRequired={current.isRequired}
               />
             );
 
           case QuestionTypes.DROPDOWN:
             return (
-              <ItemDropdown
-                id={id}
-                contents={current.contents}
-                isPreview={false}
-              />
+              <>
+                {previewMatch ? (
+                  <PreviewDropdown id={id} isRequired={current.isRequired} />
+                ) : (
+                  <ItemDropdown
+                    id={id}
+                    contents={current.contents}
+                    isPreview={previewMatch}
+                    isRequired={current.isRequired}
+                  />
+                )}
+              </>
             );
         }
       })()}

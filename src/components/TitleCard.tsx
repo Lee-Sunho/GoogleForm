@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { RootState } from "../redux/configureStore";
 import { setTitle, setDescription } from "../redux/modules/titleSlice";
 import { setFocus } from "../redux/modules/focusSlice";
+import { useMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,10 +59,14 @@ const TitleInput = styled.input`
   font-weight: 400;
   border: 0;
   outline: none;
-  //border-bottom: 1px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
+  }
+  &:disabled {
+    color: black;
+    background-color: white;
+    border-bottom: none;
   }
 `;
 
@@ -76,17 +81,26 @@ const DescriptionInput = styled.input`
   width: 100%;
   border: 0;
   outline: none;
-  //border-bottom: 1px solid ${(props) => props.theme.bordergray};
   line-height: 135%;
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
   }
+  &:disabled {
+    color: black;
+    border-bottom: none;
+    background-color: white;
+  }
 `;
 
 const TitleCard = () => {
+  const previewMatch = useMatch("/preview");
   const dispatch = useDispatch();
   const title = useSelector<RootState, string>((state) => {
     return state.title.title;
+  });
+
+  const description = useSelector<RootState, string>((state) => {
+    return state.title.description;
   });
 
   const focusedId = useSelector<RootState, string>((state) => {
@@ -109,12 +123,22 @@ const TitleCard = () => {
     <Wrapper onClick={handleClick}>
       <HeaderLine />
       <ContentWrapper focused={focusedId === "title" ? true : false}>
-        <FocusLine focused={focusedId === "title" ? true : false} />
-        <TitleWrapper className="input">
-          <TitleInput onChange={onChangeTitle} value={title} />
+        {previewMatch ? null : (
+          <FocusLine focused={focusedId === "title" ? true : false} />
+        )}
+
+        <TitleWrapper>
+          <TitleInput
+            className="input"
+            disabled={previewMatch ? true : false}
+            onChange={onChangeTitle}
+            value={title}
+          />
         </TitleWrapper>
         <DescriptionWrapper>
           <DescriptionInput
+            disabled={previewMatch ? true : false}
+            value={description}
             className="input"
             onChange={onChangeDescription}
             placeholder="설명을 입력하세요"

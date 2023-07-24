@@ -2,15 +2,19 @@ import styled from "styled-components";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { PathMatch } from "react-router-dom";
 import {
   addOption,
   removeOption,
   ItemProps,
   setOptionText,
+  QuestionTypes,
+  setAnswer,
 } from "../redux/modules/questionSlice";
 import Icon_delete from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -36,6 +40,11 @@ const Input = styled.input`
   &:read-only {
     border-bottom: 1px solid ${(props) => props.theme.bordergray};
     color: ${(props) => props.theme.textgray};
+  }
+  &:disabled {
+    color: black;
+    border-bottom: none;
+    background-color: white;
   }
 `;
 
@@ -66,11 +75,14 @@ const AddOption = styled.span<{ isEtc: boolean }>`
 
 interface IProps {
   id: string;
-  isPreview: boolean;
+  isPreview: PathMatch | null;
   contents: ItemProps[];
+  isRequired: boolean;
 }
 
-const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
+const ItemCheckbox = ({ id, isPreview, contents, isRequired }: IProps) => {
+  const questionType = QuestionTypes.CHECKBOX;
+  const [values, setValues] = useState<string[]>([]);
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -90,11 +102,20 @@ const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
     dispatch(removeOption({ optionId, id }));
   };
 
-  const handleOnChange = (
+  const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     optionId: string
   ) => {
     dispatch(setOptionText({ id, optionId, text: e.target.value }));
+  };
+
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValues((prev) => [...prev, e.target.value]);
+    handleAnswer(e.target.value);
+  };
+
+  const handleAnswer = (value: string) => {
+    dispatch(setAnswer({ id, text: value, questionType }));
   };
   return (
     <Wrapper>
@@ -106,6 +127,8 @@ const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
               value={item.text}
               control={
                 <Checkbox
+                  onChange={handleCheck}
+                  checked={isPreview && item.isAnswer ? true : false}
                   disabled={!isPreview}
                   sx={{
                     "&.Mui-checked": {
@@ -117,8 +140,9 @@ const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
               }
               label={
                 <Input
-                  onChange={(e) => handleOnChange(e, item.optionId)}
+                  onChange={(e) => handleInputChange(e, item.optionId)}
                   readOnly={item.isEtc ? true : false}
+                  disabled={isPreview ? true : false}
                   value={item.text}
                 />
               }
@@ -130,7 +154,7 @@ const ItemCheckbox = ({ id, isPreview, contents }: IProps) => {
             ) : null}
           </ItemWrapper>
         ))}
-        {focusedId === id ? (
+        {focusedId === id && !isPreview ? (
           <ItemWrapper>
             <FormControlLabel
               value={"추가"}

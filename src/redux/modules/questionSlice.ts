@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export enum QuestionTypes {
   SHORTTEXT = "SHORTTEXT",
@@ -20,6 +20,7 @@ export interface ItemProps {
   optionId: string;
   text: string;
   isEtc: boolean;
+  isAnswer: boolean;
 }
 
 const createNewQuestion = (id: string, questionTitle: string) => {
@@ -28,17 +29,28 @@ const createNewQuestion = (id: string, questionTitle: string) => {
     questionTitle,
     questionType: QuestionTypes.RADIO,
     contents: [
-      { optionId: Date.now().toString(), text: "옵션 1", isEtc: false },
+      {
+        optionId: Date.now().toString(),
+        text: "옵션 1",
+        isEtc: false,
+        isAnswer: false,
+      },
     ],
     isRequired: false,
   };
 };
 
-const createNewOption = (optionId: string, text: string, isEtc: boolean) => {
+const createNewOption = (
+  optionId: string,
+  text: string,
+  isEtc: boolean,
+  isAnswer: boolean
+) => {
   return {
     optionId,
     text,
     isEtc,
+    isAnswer,
   };
 };
 
@@ -67,9 +79,18 @@ const questionSlice = createSlice({
         createNewOption(
           action.payload.optionId,
           action.payload.text,
-          action.payload.isEtc
+          action.payload.isEtc,
+          action.payload.isAnswer
         )
       );
+    },
+    setText: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      target!.contents[0].text = action.payload.text;
+      const value = String(action.payload.text);
+      value.length > 0
+        ? (target!.contents[0].isAnswer = true)
+        : (target!.contents[0].isAnswer = false);
     },
     removeOption: (state: QuestionProps[], action) => {
       const target = state.find((card) => card.id === action.payload.id);
@@ -77,6 +98,26 @@ const questionSlice = createSlice({
         (item) => item.optionId !== action.payload.optionId
       );
       target!.contents = temp;
+    },
+    setAnswer: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id);
+      const targetItem = target?.contents.find(
+        (item) => item.text === action.payload.text
+      );
+
+      if (
+        action.payload.questionType === QuestionTypes.RADIO ||
+        action.payload.questionType === QuestionTypes.DROPDOWN
+      ) {
+        target?.contents.map((item) =>
+          item.text !== action.payload.text
+            ? (item.isAnswer = false)
+            : (item.isAnswer = true)
+        );
+      }
+      if (action.payload.questionType === QuestionTypes.CHECKBOX) {
+        targetItem!.isAnswer = !targetItem?.isAnswer;
+      }
     },
     setOptionText: (state: QuestionProps[], action) => {
       const target = state.find((card) => card.id === action.payload.id);
@@ -112,6 +153,19 @@ const questionSlice = createSlice({
       const target = state.find((card) => card.id === action.payload.id);
       target!.isRequired = !target!.isRequired;
     },
+    clearAnswer: (state: QuestionProps[], action) => {
+      for (let i = 0; i < state.length; i++) {
+        if (
+          state[i].questionType === QuestionTypes.SHORTTEXT ||
+          state[i].questionType === QuestionTypes.LONGTEXT
+        ) {
+          state[i].contents[0].text = "";
+          state[i].contents[0].isAnswer = false;
+        } else {
+          state[i].contents.map((item) => (item.isAnswer = false));
+        }
+      }
+    },
   },
 });
 
@@ -125,5 +179,8 @@ export const {
   copyQuestion,
   removeQuestion,
   toggleIsRequire,
+  setAnswer,
+  setText,
+  clearAnswer,
 } = questionSlice.actions;
 export default questionSlice.reducer;

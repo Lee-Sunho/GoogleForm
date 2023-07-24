@@ -2,15 +2,19 @@ import styled from "styled-components";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import { PathMatch } from "react-router-dom";
 import {
   addOption,
   removeOption,
   setOptionText,
   ItemProps,
+  setAnswer,
+  QuestionTypes,
 } from "../redux/modules/questionSlice";
 import Icon_delete from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -36,6 +40,11 @@ const Input = styled.input`
   &:read-only {
     border-bottom: 1px solid ${(props) => props.theme.bordergray};
     color: ${(props) => props.theme.textgray};
+  }
+  &:disabled {
+    color: black;
+    border-bottom: none;
+    background-color: white;
   }
 `;
 
@@ -66,11 +75,14 @@ const AddOption = styled.span<{ isEtc: boolean }>`
 
 interface IProps {
   id: string;
-  isPreview: boolean;
+  isPreview: PathMatch | null;
   contents: ItemProps[];
+  isRequired: boolean;
 }
 
-const ItemRadio = ({ id, isPreview, contents }: IProps) => {
+const ItemRadio = ({ id, isPreview, contents, isRequired }: IProps) => {
+  const questionType = QuestionTypes.RADIO;
+  const [value, setValue] = useState<string>();
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -78,27 +90,42 @@ const ItemRadio = ({ id, isPreview, contents }: IProps) => {
 
   const handleAddOption = () => {
     const optionId = Date.now().toString();
-    dispatch(addOption({ id, optionId, text: "", isEtc: false }));
+    dispatch(
+      addOption({ id, optionId, text: "", isEtc: false, isAnswer: false })
+    );
   };
 
   const handleAddEtcOption = () => {
     const optionId = Date.now().toString();
-    dispatch(addOption({ id, optionId, text: "기타", isEtc: true }));
+    dispatch(
+      addOption({ id, optionId, text: "기타", isEtc: true, isAnswer: false })
+    );
   };
 
   const handleRemoveOption = (optionId: string) => {
     dispatch(removeOption({ optionId, id }));
   };
 
-  const handleOnChange = (
+  const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     optionId: string
   ) => {
     dispatch(setOptionText({ id, optionId, text: e.target.value }));
   };
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    handleAnswer(e.target.value);
+  };
+
+  const handleAnswer = (value: string) => {
+    dispatch(setAnswer({ id, text: value, questionType }));
+  };
   return (
     <Wrapper>
       <RadioGroup
+        value={value}
+        onChange={handleRadioChange}
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"
       >
@@ -109,6 +136,7 @@ const ItemRadio = ({ id, isPreview, contents }: IProps) => {
               value={item.text}
               control={
                 <Radio
+                  checked={isPreview && item.isAnswer ? true : false}
                   disabled={!isPreview}
                   sx={{
                     "&.Mui-checked": {
@@ -120,20 +148,21 @@ const ItemRadio = ({ id, isPreview, contents }: IProps) => {
               }
               label={
                 <Input
-                  onChange={(e) => handleOnChange(e, item.optionId)}
+                  onChange={(e) => handleInputChange(e, item.optionId)}
                   readOnly={item.isEtc ? true : false}
+                  disabled={isPreview ? true : false}
                   value={item.text}
                 />
               }
             />
-            {contents.length > 1 && focusedId === id ? (
+            {contents.length > 1 && focusedId === id && !isPreview ? (
               <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
                 <Icon_delete fontSize="small" />
               </DeleteButton>
             ) : null}
           </ItemWrapper>
         ))}
-        {focusedId === id ? (
+        {focusedId === id && !isPreview ? (
           <ItemWrapper>
             <FormControlLabel
               value={"추가"}

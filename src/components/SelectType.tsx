@@ -14,6 +14,7 @@ import Icon_longText from "@mui/icons-material/SubjectOutlined";
 import Icon_radio from "@mui/icons-material/RadioButtonCheckedOutlined";
 import Icon_checkbox from "@mui/icons-material/CheckBoxOutlined";
 import Icon_dropdown from "@mui/icons-material/ArrowDropDownCircleOutlined";
+import { PathMatch } from "react-router-dom";
 
 const Item = styled.div`
   display: flex;
@@ -29,9 +30,10 @@ const Text = styled.span`
 
 interface IProps {
   id: string;
+  isPreview: PathMatch<string> | null;
 }
 
-const SelectType = ({ id }: IProps) => {
+const SelectType = ({ id, isPreview }: IProps) => {
   const dispatch = useDispatch();
   const cardList = useSelector<RootState, QuestionProps[]>((state) => {
     return state.question;
@@ -47,6 +49,7 @@ const SelectType = ({ id }: IProps) => {
         m: 1,
         width: 230,
         height: 48,
+        visibility: isPreview ? "hidden" : "visible",
       }}
       size="small"
     >

@@ -6,6 +6,7 @@ import { setQuestionTitle } from "../redux/modules/questionSlice";
 import SelectType from "./SelectType";
 import ContentsArea from "./ContentsArea";
 import CardFooter from "./CardFooter";
+import { useMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,6 +35,8 @@ const FocusLine = styled.div<{ focused: boolean }>`
 `;
 
 const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
   padding: 8px, 24px;
   margin-right: 24px;
@@ -53,14 +56,25 @@ const TitleInput = styled.input<{ focused: boolean }>`
   &:focus {
     border-bottom: 2px solid ${(props) => props.theme.darkpurple};
   }
+  &:disabled {
+    color: black;
+    border-bottom: none;
+    background-color: white;
+  }
+`;
+
+const RequiredMark = styled.span`
+  color: red;
 `;
 
 interface IProps {
   id: string;
   questionTitle: string;
+  isRequired: boolean;
 }
 
-const QuestionCard = ({ id, questionTitle }: IProps) => {
+const QuestionCard = ({ id, questionTitle, isRequired }: IProps) => {
+  const previewMatch = useMatch("/preview");
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -76,20 +90,24 @@ const QuestionCard = ({ id, questionTitle }: IProps) => {
 
   return (
     <Wrapper onClick={handleClick}>
-      <FocusLine focused={focusedId === id ? true : false} />
+      {previewMatch ? null : (
+        <FocusLine focused={focusedId === "title" ? true : false} />
+      )}
       <InfoWrapper>
         <TitleWrapper>
+          {previewMatch && isRequired ? <RequiredMark>*</RequiredMark> : null}
           <TitleInput
             onChange={handleTitle}
+            disabled={previewMatch ? true : false}
             focused={focusedId === id ? true : false}
             value={questionTitle}
             placeholder="질문"
           />
         </TitleWrapper>
-        <SelectType id={id} />
+        <SelectType id={id} isPreview={previewMatch} />
       </InfoWrapper>
       <ContentsArea id={id} />
-      {focusedId === id ? <CardFooter id={id} /> : null}
+      {focusedId === id && !previewMatch ? <CardFooter id={id} /> : null}
     </Wrapper>
   );
 };
