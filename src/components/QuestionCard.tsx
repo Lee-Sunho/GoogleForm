@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   border-radius: 8px;
   background-color: white;
   margin-top: 13px;
+  margin-bottom: 13px;
 `;
 
 const InfoWrapper = styled.div`
