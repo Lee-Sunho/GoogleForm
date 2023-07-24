@@ -147,7 +147,7 @@ const ItemCheckbox = ({ id, isPreview, contents, isRequired }: IProps) => {
                 />
               }
             />
-            {contents.length > 1 && focusedId === id ? (
+            {contents.length > 1 && focusedId === id && !isPreview ? (
               <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
                 <Icon_delete fontSize="small" />
               </DeleteButton>
