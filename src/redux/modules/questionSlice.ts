@@ -166,6 +166,13 @@ const questionSlice = createSlice({
         }
       }
     },
+    moveQuestion: (state: QuestionProps[], action) => {
+      //const copiedList = JSON.parse(JSON.stringify(state));
+      const copiedList = [...state];
+      const target = copiedList.splice(Number(action.payload.sourceIndex), 1);
+      copiedList.splice(Number(action.payload.destinationIndex), 0, ...target);
+      return copiedList;
+    },
   },
 });
 
@@ -182,5 +189,6 @@ export const {
   setAnswer,
   setText,
   clearAnswer,
+  moveQuestion,
 } = questionSlice.actions;
 export default questionSlice.reducer;

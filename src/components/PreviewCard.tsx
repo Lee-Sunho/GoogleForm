@@ -6,7 +6,7 @@ import { setQuestionTitle } from "../redux/modules/questionSlice";
 import SelectType from "./SelectType";
 import ContentsArea from "./ContentsArea";
 import CardFooter from "./CardFooter";
-import { Draggable } from "react-beautiful-dnd";
+import { useMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   position: relative;
@@ -75,7 +75,8 @@ interface IProps {
   isRequired: boolean;
 }
 
-const QuestionCard = ({ id, index, questionTitle, isRequired }: IProps) => {
+const PreviewCard = ({ id, index, questionTitle, isRequired }: IProps) => {
+  const previewMatch = useMatch("/preview");
   const dispatch = useDispatch();
   const focusedId = useSelector<RootState, string>((state) => {
     return state.focus.focusedId;
@@ -90,34 +91,27 @@ const QuestionCard = ({ id, index, questionTitle, isRequired }: IProps) => {
   };
 
   return (
-    <Draggable draggableId={id} index={index} key={id}>
-      {(provided) => (
-        <Wrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          onClick={handleClick}
-        >
-          <FocusLine focused={focusedId === id ? true : false} />
-
-          <InfoWrapper>
-            <TitleWrapper>
-              {isRequired ? <RequiredMark>*</RequiredMark> : null}
-              <TitleInput
-                onChange={handleTitle}
-                focused={focusedId === id ? true : false}
-                value={questionTitle}
-                placeholder="질문"
-              />
-            </TitleWrapper>
-            <SelectType id={id} isPreview={null} />
-          </InfoWrapper>
-          <ContentsArea id={id} />
-          {focusedId === id ? <CardFooter id={id} /> : null}
-        </Wrapper>
+    <Wrapper onClick={handleClick}>
+      {previewMatch ? null : (
+        <FocusLine focused={focusedId === id ? true : false} />
       )}
-    </Draggable>
+      <InfoWrapper>
+        <TitleWrapper>
+          {previewMatch && isRequired ? <RequiredMark>*</RequiredMark> : null}
+          <TitleInput
+            onChange={handleTitle}
+            disabled={previewMatch ? true : false}
+            focused={focusedId === id ? true : false}
+            value={questionTitle}
+            placeholder="질문"
+          />
+        </TitleWrapper>
+        <SelectType id={id} isPreview={previewMatch} />
+      </InfoWrapper>
+      <ContentsArea id={id} />
+      {focusedId === id && !previewMatch ? <CardFooter id={id} /> : null}
+    </Wrapper>
   );
 };
 
-export default QuestionCard;
+export default PreviewCard;
