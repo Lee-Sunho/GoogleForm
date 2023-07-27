@@ -1,46 +1,38 @@
-# Getting Started with Create React App
+# 클라썸 구글폼 구현 과제 - 이선호
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## **💡 실행 방법**
 
-## Available Scripts
+- npm i
+- npm start
 
-In the project directory, you can run:
+## **🔨 사용 기술 스택**
 
-### `npm start`
+- react: ^18.2.0
+- typescript: ^4.9.5
+- react-redux: ^8.1.1
+- reduxjs/toolkit: ^1.9.5
+- redux-persist: ^6.0.0
+- styled-components: ^6.0.5
+- react-beautiful-dnd: ^13.1.1
+- react-router-dom: ^6.14.2
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## **🚀 구현 기능 목록**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- 질문을 추가하면 질문이 추가됩니다. ✔
 
-### `npm test`
+  - 단답형
+  - 장문형
+  - 객관식 질문
+  - 체크박스
+  - 드롭다운
+    <br><br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 질문 복사 기능 ✔
+- 질문 삭제 기능 ✔
+- 필수 옵션 설정 기능 ✔
+- 미리 보기 기능에서 해당 설문지를 미리볼 수 있어야 합니다! ✔
+  - [제출] 버튼 눌렀을 경우 사용자가 작성한 데이터를 보여 줍니다. (보여지는 형식은 자유 형식) ✔
+  - 양식 지우기 (**추가 과제, 가산점**) ✔
+    <br><br>
+- 질문 순서 변경 (드레그엔 드랍) (추가 과제, 가산점) ✔
+- 질문의 옵션 순서 변경 (드레그엔 드랍) (추가 과제, 가산점) ✔
