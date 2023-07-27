@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { QuestionProps, clearAnswer } from "../redux/modules/questionSlice";
 import TitleCard from "../components/TitleCard";
-import QuestionCard from "../components/QuestionCard";
+import PreviewCard from "../components/PreviewCard";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -121,10 +121,11 @@ const Preview = () => {
       <CardListWrapper>
         <CardList>
           <TitleCard />
-          {questionList.map((card) => (
-            <QuestionCard
+          {questionList.map((card, index) => (
+            <PreviewCard
               key={card.id}
               id={card.id}
+              index={index}
               questionTitle={card.questionTitle}
               isRequired={card.isRequired}
             />
