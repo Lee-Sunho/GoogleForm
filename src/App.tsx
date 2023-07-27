@@ -1,25 +1,41 @@
 import React from "react";
 import { GlobalStyle } from "./style/GlobalStyle";
-import { defaultTheme } from "./style/theme";
-import { ThemeProvider } from "styled-components";
-import { Provider } from "react-redux";
 import { Router } from "./Router";
-import store from "./redux/configureStore";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { useDispatch } from "react-redux";
+import { moveQuestion, moveOption } from "./redux/modules/questionSlice";
 
 function App() {
-  let persistor = persistStore(store);
+  const dispatch = useDispatch();
+
+  const onDragEnd = (info: DropResult) => {
+    const { destination, source } = info;
+    if (!destination) return;
+
+    if (source.droppableId === "question") {
+      dispatch(
+        moveQuestion({
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+        })
+      );
+    } else if (destination.droppableId === source.droppableId) {
+      dispatch(
+        moveOption({
+          id: source.droppableId,
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+        })
+      );
+    }
+  };
+
   return (
     <>
-      <ThemeProvider theme={defaultTheme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <GlobalStyle />
-            <Router />
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
+      <GlobalStyle />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Router />
+      </DragDropContext>
     </>
   );
 }

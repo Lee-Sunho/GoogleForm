@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { PathMatch } from "react-router-dom";
 import PreviewDropdown from "./PreviewDropdown";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -109,38 +110,57 @@ const ItemDropdown = ({ id, isPreview, contents, isRequired }: IProps) => {
     dispatch(setOptionText({ id, optionId, text: e.target.value }));
   };
   return (
-    <Wrapper>
-      <FormGroup>
-        {contents.map((item, index) => (
-          <ItemWrapper>
-            <NumberBox>{index + 1}</NumberBox>
-            <InputWrapper>
-              <Input
-                onChange={(e) => handleOnChange(e, item.optionId)}
-                readOnly={item.isEtc ? true : false}
-                value={item.text}
-              />
-            </InputWrapper>
+    <Droppable droppableId={id} type="content">
+      {(provided) => (
+        <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
+          <FormGroup>
+            {contents.map((item, index) => (
+              <Draggable
+                draggableId={item.optionId}
+                index={index}
+                key={item.optionId}
+                isDragDisabled={isPreview ? true : false}
+              >
+                {(provided_draggable) => (
+                  <ItemWrapper
+                    ref={provided_draggable.innerRef}
+                    {...provided_draggable.draggableProps}
+                    {...provided_draggable.dragHandleProps}
+                  >
+                    <NumberBox>{index + 1}</NumberBox>
+                    <InputWrapper>
+                      <Input
+                        onChange={(e) => handleOnChange(e, item.optionId)}
+                        readOnly={item.isEtc ? true : false}
+                        value={item.text}
+                      />
+                    </InputWrapper>
 
-            {contents.length > 1 && focusedId === id ? (
-              <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
-                <Icon_delete fontSize="small" />
-              </DeleteButton>
+                    {contents.length > 1 && focusedId === id ? (
+                      <DeleteButton
+                        onClick={() => handleRemoveOption(item.optionId)}
+                      >
+                        <Icon_delete fontSize="small" />
+                      </DeleteButton>
+                    ) : null}
+                  </ItemWrapper>
+                )}
+              </Draggable>
+            ))}
+            {focusedId === id && !isPreview ? (
+              <ItemWrapper>
+                <NumberBox>{contents.length + 1}</NumberBox>
+                <AddOptionsWrapper>
+                  <AddOption onClick={handleAddOption} isEtc={false}>
+                    옵션 추가
+                  </AddOption>
+                </AddOptionsWrapper>
+              </ItemWrapper>
             ) : null}
-          </ItemWrapper>
-        ))}
-        {focusedId === id && !isPreview ? (
-          <ItemWrapper>
-            <NumberBox>{contents.length + 1}</NumberBox>
-            <AddOptionsWrapper>
-              <AddOption onClick={handleAddOption} isEtc={false}>
-                옵션 추가
-              </AddOption>
-            </AddOptionsWrapper>
-          </ItemWrapper>
-        ) : null}
-      </FormGroup>
-    </Wrapper>
+          </FormGroup>
+        </Wrapper>
+      )}
+    </Droppable>
   );
 };
 

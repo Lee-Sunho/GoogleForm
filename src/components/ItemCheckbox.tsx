@@ -15,6 +15,7 @@ import Icon_delete from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/configureStore";
 import { useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 const Wrapper = styled.div`
   padding: 0px 24px 24px 24px;
@@ -118,74 +119,93 @@ const ItemCheckbox = ({ id, isPreview, contents, isRequired }: IProps) => {
     dispatch(setAnswer({ id, text: value, questionType }));
   };
   return (
-    <Wrapper>
-      <FormGroup>
-        {contents.map((item) => (
-          <ItemWrapper>
-            <FormControlLabel
-              sx={{ width: "100%" }}
-              value={item.text}
-              control={
-                <Checkbox
-                  onChange={handleCheck}
-                  checked={isPreview && item.isAnswer ? true : false}
-                  disabled={!isPreview}
-                  sx={{
-                    "&.Mui-checked": {
-                      color: "#673ab7",
-                    },
-                  }}
-                  size="small"
+    <Droppable droppableId={id} type="content">
+      {(provided) => (
+        <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
+          <FormGroup>
+            {contents.map((item, index) => (
+              <Draggable
+                draggableId={item.optionId}
+                index={index}
+                key={item.optionId}
+                isDragDisabled={isPreview ? true : false}
+              >
+                {(provided_draggable) => (
+                  <ItemWrapper
+                    ref={provided_draggable.innerRef}
+                    {...provided_draggable.draggableProps}
+                    {...provided_draggable.dragHandleProps}
+                  >
+                    <FormControlLabel
+                      sx={{ width: "100%" }}
+                      value={item.text}
+                      control={
+                        <Checkbox
+                          onChange={handleCheck}
+                          checked={isPreview && item.isAnswer ? true : false}
+                          disabled={!isPreview}
+                          sx={{
+                            "&.Mui-checked": {
+                              color: "#673ab7",
+                            },
+                          }}
+                          size="small"
+                        />
+                      }
+                      label={
+                        <Input
+                          onChange={(e) => handleInputChange(e, item.optionId)}
+                          readOnly={item.isEtc ? true : false}
+                          disabled={isPreview ? true : false}
+                          value={item.text}
+                        />
+                      }
+                    />
+                    {contents.length > 1 && focusedId === id && !isPreview ? (
+                      <DeleteButton
+                        onClick={() => handleRemoveOption(item.optionId)}
+                      >
+                        <Icon_delete fontSize="small" />
+                      </DeleteButton>
+                    ) : null}
+                  </ItemWrapper>
+                )}
+              </Draggable>
+            ))}
+            {focusedId === id && !isPreview ? (
+              <ItemWrapper>
+                <FormControlLabel
+                  value={"추가"}
+                  control={
+                    <Checkbox
+                      disabled={!isPreview}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#673ab7",
+                        },
+                      }}
+                      size="small"
+                    />
+                  }
+                  label={
+                    <AddOptionsWrapper>
+                      <AddOption onClick={handleAddOption} isEtc={false}>
+                        옵션 추가{" "}
+                      </AddOption>
+                      <span> 또는 </span>
+                      <AddOption onClick={handleAddEtcOption} isEtc={true}>
+                        {" "}
+                        '기타' 추가
+                      </AddOption>
+                    </AddOptionsWrapper>
+                  }
                 />
-              }
-              label={
-                <Input
-                  onChange={(e) => handleInputChange(e, item.optionId)}
-                  readOnly={item.isEtc ? true : false}
-                  disabled={isPreview ? true : false}
-                  value={item.text}
-                />
-              }
-            />
-            {contents.length > 1 && focusedId === id && !isPreview ? (
-              <DeleteButton onClick={() => handleRemoveOption(item.optionId)}>
-                <Icon_delete fontSize="small" />
-              </DeleteButton>
+              </ItemWrapper>
             ) : null}
-          </ItemWrapper>
-        ))}
-        {focusedId === id && !isPreview ? (
-          <ItemWrapper>
-            <FormControlLabel
-              value={"추가"}
-              control={
-                <Checkbox
-                  disabled={!isPreview}
-                  sx={{
-                    "&.Mui-checked": {
-                      color: "#673ab7",
-                    },
-                  }}
-                  size="small"
-                />
-              }
-              label={
-                <AddOptionsWrapper>
-                  <AddOption onClick={handleAddOption} isEtc={false}>
-                    옵션 추가{" "}
-                  </AddOption>
-                  <span> 또는 </span>
-                  <AddOption onClick={handleAddEtcOption} isEtc={true}>
-                    {" "}
-                    '기타' 추가
-                  </AddOption>
-                </AddOptionsWrapper>
-              }
-            />
-          </ItemWrapper>
-        ) : null}
-      </FormGroup>
-    </Wrapper>
+          </FormGroup>
+        </Wrapper>
+      )}
+    </Droppable>
   );
 };
 

@@ -167,11 +167,24 @@ const questionSlice = createSlice({
       }
     },
     moveQuestion: (state: QuestionProps[], action) => {
-      //const copiedList = JSON.parse(JSON.stringify(state));
-      const copiedList = [...state];
+      const copiedList = JSON.parse(JSON.stringify(state));
       const target = copiedList.splice(Number(action.payload.sourceIndex), 1);
       copiedList.splice(Number(action.payload.destinationIndex), 0, ...target);
       return copiedList;
+    },
+    moveOption: (state: QuestionProps[], action) => {
+      const target = state.find((card) => card.id === action.payload.id)!;
+      const copiedContents = JSON.parse(JSON.stringify(target?.contents));
+      const targetOption = copiedContents.splice(
+        Number(action.payload.sourceIndex),
+        1
+      );
+      copiedContents.splice(
+        Number(action.payload.destinationIndex),
+        0,
+        ...targetOption
+      );
+      target.contents = copiedContents;
     },
   },
 });
@@ -190,5 +203,6 @@ export const {
   setText,
   clearAnswer,
   moveQuestion,
+  moveOption,
 } = questionSlice.actions;
 export default questionSlice.reducer;
