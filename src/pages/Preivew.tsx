@@ -71,14 +71,7 @@ const Preview = () => {
   };
 
   useEffect(() => {
-    const func = async () => {
-      try {
-        await dispatch(clearAnswer({}));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    func();
+    dispatch(clearAnswer({}));
   }, []);
 
   useEffect(() => {
@@ -104,12 +97,8 @@ const Preview = () => {
     setInvalidQuestions(temp);
   };
 
-  const handleSubmit = async () => {
-    try {
-      await checkRequired();
-    } catch (err) {
-      console.log(err);
-    }
+  const handleSubmit = () => {
+    checkRequired();
     console.log(inValidQuestions.length);
     if (inValidQuestions.length === 0) {
       navigate("/preview/result");
