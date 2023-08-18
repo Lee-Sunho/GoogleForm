@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/googleform/static/js/main.d418d8f1.js",
+    "index.html": "/googleform/index.html",
+    "main.d418d8f1.js.map": "/googleform/static/js/main.d418d8f1.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d418d8f1.js"
+  ]
+}
